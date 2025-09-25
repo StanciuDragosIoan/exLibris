@@ -86,29 +86,29 @@ At this time of writing, Backstage can be configured to use one of five cache st
 
 ##### Use memory for cache
 
-pre.code
+pre.conr
 backend:
   cache:
     store: memory
-pre.code
+pre.conr
 
 ##### Use memcache for cache
 
-pre.code
+pre.conr
 backend:
   cache:
     store: memcache
     connection: user:pass@cache.example.com:11211
-pre.code
+pre.conr
 
 
 ##### Use Redis for cache
 
-pre.code
+pre.conr
 backend:
   cache:
     store: redis
     connection: redis://user:pass@cache.example.com:6379
-pre.code
+pre.conr
 
 For more info [see here](https://backstage.io/docs/overview/architecture-overview#cache)

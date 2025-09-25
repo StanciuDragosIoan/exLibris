@@ -19,12 +19,20 @@ function markdownToHTML(markdown) {
   // Convert line breaks only if we type \nl
   markdown = markdown.replace(/\\nl/g, "<br><br>");
 
-  // Convert pre.code syntax to <pre class="code">...</pre>
+  // Convert pre.code syntax to <pre class="code">...</pre> for code we want to run
   markdown = markdown.replace(
     /pre\.code\s*([\s\S]*?)\s*pre\.code/gim,
     `<pre class="code">$1 <br> <button onClick="runCode(this.parentElement.textContent, this.parentElement)" class="runCode">RUN</button>
         <button onClick="copyCode(this.parentElement.textContent)" class="copyCode"><i class="fa-regular fa-copy"></i></button>
         </pre>`
+  );
+
+  //covnert pre.conr to  <pre class="code">...</pre> for code we DO NOT want to run
+  markdown = markdown.replace(
+    /pre\.conr\s*([\s\S]*?)\s*pre\.conr/gim,
+    `<pre class="code">$1
+    <button onClick="copyCode(this.parentElement.textContent)" class="copyCode"><i class="fa-regular fa-copy"></i></button>
+    </pre>`
   );
 
   // Convert images with Markdown syntax ![alt](src) correctly
@@ -66,6 +74,10 @@ function markdownToHTML(markdown) {
     return codeBlocks[index];
   });
 
+
+  //support for table
+  
+
   return markdown.trim(); // Remove any extra spaces or lines
 }
 
@@ -96,7 +108,6 @@ async function runCode(code, parent) {
   try {
     let codeToRun = code.split("RUN")[0].trim();
 
-    
     eval(codeToRun);
     displayOutput(outputLogs.join("\n"), parent);
   } catch (error) {
@@ -119,6 +130,26 @@ function displayOutput(output, parent) {
   outputArea.appendChild(outputElement);
 }
 
+
+//sticky btn
+function createStickyScrollButton() {
+  // Create button element
+  const button = document.createElement('button');
+  button.textContent = 'Scroll to Bottom';
+  button.className = 'sticky-scroll-button';
+
+  // Append button to the body
+  document.body.appendChild(button);
+
+  // Add click event listener to scroll to bottom
+  button.addEventListener('click', () => {
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: 'smooth'
+    });
+  });
+}
+createStickyScrollButton()
 // Fetch the markdown file
 fetch("index.md")
   .then((response) => {
