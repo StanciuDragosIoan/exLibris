@@ -112,3 +112,55 @@ backend:
 pre.conr
 
 For more info [see here](https://backstage.io/docs/overview/architecture-overview#cache)
+
+
+### Backstage Software Catalog
+
+#### What is a Software Catalog?
+
+The Backstage Software Catalog is a centralized system that keeps track of ownership and metadata for all the software in your ecosystem (services, websites, libraries, data pipelines, etc). The catalog is built around the concept of [metadata YAML files](https://backstage.io/docs/features/software-catalog/descriptor-format/) stored together with the code, which are then harvested and visualized in Backstage.
+
+\nl
+
+The catalog entity descriptor is a file, it can be named anything but it is recommended to name it _catalog-info.yaml_ and this file supports substitutions in the description format using placeholders like: _$json_, _$text_ and _yaml_, and it will subsequently insert the placeholder values into the definition of an entity. [See more](https://backstage.io/docs/features/software-catalog/descriptor-format/#overall-shape-of-an-entity)
+
+\nl 
+
+The catalog makes it easy for teams to manage their services. It serves twon main use-cases:
+
+\nl
+
+1. Helps teams manage and maintain the software they own, teams get a uniform view of all their software, services, libraries, websites, ML models, etc..
+
+\nl
+
+2. Makes al the software discoverable
+
+\nl
+
+The catalog is available at the _/catalog_ route.
+
+
+#### Adding components to the catalog:
+
+
+The source of truth for the components in your software catalog are [metadata YAML](https://backstage.io/docs/features/software-catalog/descriptor-format) files stored in source control (GitHub, GitHub Enterprise, GitLab, ...). Repositories can include one or multiple metadata files. Usually the metadata file is located in the repository root. This is not a formal requirement & metadata files can be placed anywhere in the repository.
+
+\nl
+
+There are 3 ways to add components to the catalog:
+
+\nl
+
+1. Manually register components (we use the _/create_ route for that)
+
+\nl
+
+2. We can create new components through backstage.
+
+\nl 
+
+For instance we can create [Components](https://backstage.io/docs/features/software-catalog/system-model) inside Backstage using [backstage software templates](https://backstage.io/docs/features/software-templates/) or we can also use [static configuration](https://backstage.io/docs/conf/)
+
+
+3. Integrating with an [external source](https://backstage.io/docs/features/software-catalog/external-integrations/)

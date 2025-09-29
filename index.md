@@ -5,7 +5,7 @@
 
 ### Backstage JS Notes
 
-[Backstage Page](./backstageJS/index.html)
+[Backstage Page](./backstage/index.html)
 
 \nl
 
@@ -14,4 +14,8 @@
 \nl
 
 [GoLang](./golang/index.html)
+
+\nl
+
+[Azure Event Hubs](./azure/index.html)
  

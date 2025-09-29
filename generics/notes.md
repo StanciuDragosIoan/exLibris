@@ -126,3 +126,18 @@ Status and History
 \nl
 
 Runs provide detailed insights into what worked or failed. For example, if a test step fails, the run marks the job as failed, and you can drill down into logs to troubleshoot.
+
+### How to Stop stupid ZScaler service
+
+run 
+
+pre.conr
+sudo launchctl unload /Library/LaunchDaemons/com.zscaler.*
+pre.conr
+
+This unloads the service.
+
+\nl
+
+what does it mean to unload a service
+Unloading a service means stopping it from running and removing it from the system’s active service list, at least temporarily. On macOS, services are managed by a system called _launchd_, and you can control them using the launchctl command in Terminal.
