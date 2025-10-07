@@ -164,3 +164,120 @@ For instance we can create [Components](https://backstage.io/docs/features/softw
 
 
 3. Integrating with an [external source](https://backstage.io/docs/features/software-catalog/external-integrations/)
+
+#### Background
+
+The catalog has a frontend plugin part, that communicates via a service API to the backend plugin part. The backend continuously ingests data from the sources you specify, to store them in its database. The details of this process are in 
+this [article (the life of an entity)](https://backstage.io/docs/features/software-catalog/life-of-an-entity)
+
+#### The life of an entity
+
+The catalog forms a hub of sorts, where entities are ingested from various authoritative sources and held in a database, subject to automated processing, and then presented through an API for quick and easy access by Backstage and others.
+The most common source is [YAML](https://backstage.io/docs/features/software-catalog/descriptor-format) files on a standard format, living in version control systems.
+
+\nl
+
+The main extension points where developers can customize the catalog are:
+
+\nl
+
+Entity providers, that feed initial raw entity data into the catalog,
+
+\nl
+
+
+Policies, that establish baseline rules about the shape of entities,
+
+\nl
+Processors, that validate, analyze, and mutate the raw entity data into its final form.
+
+\nl
+
+The high level processes involved are:
+
+\nl
+
+_Ingestion_, where entity providers fetch raw entity data from external sources and seed it into the database
+
+\nl
+
+_Processing_, where the policies and processors continually treat the ingested data and may emit both other raw entities (that are also subject to processing), errors, relations to other entities, etc.,
+
+\nl
+
+_Stitching_, where all of the data emitted by various processors are assembled together into the final output entity.
+
+
+\nl
+
+An entity is not visible to the outside world (through the catalog API), until it has passed through the last process and landed among the final entities.
+
+[entity-process](./img/entity-process.png)
+
+
+##### Ingestion
+
+
+
+Each catalog deployment has a number of entity providers installed. They are responsible for fetching data from external authoritative sources in any way that they see fit, translating those into entity objects, and notifying the database when those entities are added or removed.
+
+\nl
+
+An entity provider is a class that implements the EntityProvider interface. It has three main parts:
+
+\nl
+
+The identity: Each provider instance has a unique, stable identifier that the database can use to keep track of the originator of each unprocessed entity.
+
+\nl
+
+The connection: During backend startup, each provider is attached to the catalog runtime.
+
+\nl
+
+The stream of events: During its lifetime, the provider can issue change events to the runtime at any point in time, to modify its set of unprocessed entities.
+
+
+
+###### Processing
+
+Every unprocessed entity comes with a timestamp, which tells at what time that the processing loop should next try to process it. When the entity first appears, this timestamp is set to "now" - asking for it to be picked up as soon as possible.
+
+\nl
+
+See more about the entities life and processing [here](https://backstage.io/docs/features/software-catalog/life-of-an-entity/)
+
+
+#### Creating a custom entity provider
+
+Entity providers sit at the very edge of the catalog. They are the original sources of entities that form roots of the processing tree.
+
+\nl
+
+The recommended way of instantiating the catalog backend classes is to use the CatalogBuilder. We will create a new EntityProvider subclass that can be added to this catalog builder. [see more](https://backstage.io/docs/features/software-catalog/external-integrations/)
+
+
+
+Some defining traits of entity providers:
+
+\nl
+
+
+You instantiate them individually using code in your backend, and pass them to the catalog builder. Often there's one provider instance per remote system.
+
+\nl
+You may be responsible for actively running them. For example, some providers need to be triggered periodically by a method call to know when they are meant to do their job; in that case you'll have to make that happen.
+
+\nl
+The timing of their work is entirely detached from the processing loops. One provider may run every 30 seconds, another one on every incoming webhook call of a certain type, etc.
+
+\nl
+They can perform detailed updates on the set of entities that they are responsible for. They can make full updates of the entire set, or issue individual additions and removals.
+
+\nl
+Their output is a set of unprocessed entities. Those are then subject to the processing loops before becoming final, stitched entities.
+When they remove an entity, the entire subtree of processor-generated entities under that root is eagerly removed as well.
+
+\nl
+
+See more [here](https://backstage.io/docs/features/software-catalog/external-integrations/)
