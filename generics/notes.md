@@ -129,7 +129,7 @@ Runs provide detailed insights into what worked or failed. For example, if a tes
 
 ### How to Stop stupid ZScaler service
 
-run 
+run
 
 pre.conr
 sudo launchctl unload /Library/LaunchDaemons/com.zscaler.*
@@ -141,3 +141,22 @@ This unloads the service.
 
 what does it mean to unload a service
 Unloading a service means stopping it from running and removing it from the system’s active service list, at least temporarily. On macOS, services are managed by a system called _launchd_, and you can control them using the launchctl command in Terminal.
+
+### How set up quick docker container postgres
+
+pre.conr
+docker run -d --name depo-postgres -p 5432:5432 -e POSTGRES_DB=depo -e POSTGRES_USER=depo -e POSTGRES_PASSWORD=yourpassword postgres
+pre.conr
+
+### How  fetch and checkout a single branch
+
+pre.conr
+git fetch origin branchName
+git checkout branchName
+pre.conr
+
+### How compare 2 branches github no PR
+
+pre.conr
+  https://github.com/OWNER/REPO/compare/branchA...branchB
+pre.coner
