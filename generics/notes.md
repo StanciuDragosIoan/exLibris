@@ -159,4 +159,17 @@ pre.conr
 
 pre.conr
   https://github.com/OWNER/REPO/compare/branchA...branchB
-pre.coner
+pre.conr
+
+### How wildcard differs from domain in config
+
+The difference between putting _azure.myDomain.com_ and _'*.azure.myDomain.com'_ in config file is the following:
+
+\nl
+
+The first one _azure.myDomain.com_ is an exact match so it will only allow requests to _https://azure.myDomain.com_, it is stricter and more secure.
+
+\nl
+
+The second one _'*.azure.myDomain.com'_ is a suffix match (a wildcard match) meaning it will allow requests to both _https://azure.myDomain.com_ and any subdomains
+like _https://test.azure.myDomain.com_, _https://dev.azure.myDomain.com_ and so on...
